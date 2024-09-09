@@ -1,0 +1,91 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>We dream</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <div class="body">
+        <div class="top-nav">
+            <div class="logo">
+                <img src="{% static 'images/CRDB logo 2.png' %}" alt="logo">
+                <img src="{% static 'images/ChatbotIcon.png'%}" alt="">
+            </div>
+            <div class="nav-links">
+                <ul>
+                    <li><a class="sign-button" href="#">SIGN UP</a></li>
+                    <li><a class="sign-button" href="#">SIGN IN</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="content-area">
+            <div class="left-side">
+                <img src="{% static 'images/Phone.png'%}" alt="" width="500px" height="550px">
+            </div>
+            <div class="right-side">
+                <div class="chat-nav">
+                    <div class="icon-chatnav">
+                        <img src="{% static 'images/ChatbotIcon.png'%}" alt="">
+                        <button class="actions"><i class="fa-solid fa-volume-high"></i></button>
+                        <button class="actions"><i class="fa-regular fa-comment"></i></button>
+                    </div>
+                    <button class="close"><i class="fa-solid fa-rectangle-xmark"></i></button>
+                </div>
+                <div class="chat-area">
+                    {% for question in chatbot %}
+                    <div class="question" data-answer="{{ question.response }}">
+                        <p>{{ question.question }}</p>
+                    </div>
+                    <!-- The answer will be dynamically added here -->
+                    <div class="answer"></div>
+                    {% endfor %}
+                </div>
+                <!-- <form class="input-area" @submit.prevent="sendMessage">
+                    <div class="input">
+                        <button><i class="fa-solid fa-face-smile"></i></button>
+                        <input type="text" placeholder="Niulize chochote, Nakusikiliza..." v-model="newMessage">
+                    </div>
+                    <button type="submit"><i class="fa-solid fa-paper-plane"></i></button>
+                </form> -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // On clicking the question, display the answer below it in a separate div
+        const questions = document.querySelectorAll('.question');
+        questions.forEach(question => {
+            question.addEventListener('click', () => {
+                
+                question.classList.toggle('active');
+                
+                const answerDiv = question.nextElementSibling;
+                
+                if (answerDiv.innerHTML.trim()) {
+                   
+                    answerDiv.innerHTML = '';
+                } else {
+                    // Otherwise, create and append the answer content
+                    const answerText = question.getAttribute('data-answer');
+                    let index = 0;
+                    const delay = 10; // Delay in milliseconds between each character
+                    const intervalId = setInterval(() => {
+                        
+                        answerDiv.innerHTML = `<div class="response"><p>${answerText.slice(0, index)}</p></div>`;
+                        index++;
+                        if (index > answerText.length) {
+                            clearInterval(intervalId);
+                            answerDiv.innerHTML = `<div class="response"><p>${answerText}</p></div>`;
+                        }
+                    }, delay);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
